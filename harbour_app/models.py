@@ -41,6 +41,15 @@ class Order(models.Model):
         # Calculate total price before saving
         if self.fish and self.quantity:
             self.total_price = self.fish.price_per_kg * self.quantity
+        if self._state.adding:  # New order
+            self.fish.available = False
+            self.fish.save()
+        elif self.status == 'cancelled':
+            self.fish.available = True
+            self.fish.save()
+        elif self.status == 'delivered':
+            self.fish.available = True
+            self.fish.save()
         super(Order, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -55,7 +64,9 @@ class Customer(models.Model):
     full_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15, unique=True)  # Made unique and required
     address = models.TextField(blank=True, null=True)
+    email = models.EmailField() 
     password = models.CharField(max_length=128) 
+    reset_code = models.CharField(max_length=6, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -109,3 +120,6 @@ class Address(models.Model):
         if self.is_default:
             Address.objects.filter(customer=self.customer, is_default=True).update(is_default=False)
         super().save(*args, **kwargs)
+        
+    def __str__(self):
+        return f"{self.customer} "

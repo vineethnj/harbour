@@ -73,3 +73,18 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class CancelOrderSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
+    
+    
+    
+    
+# serializers.py
+from rest_framework import serializers
+
+# For sending reset email
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+# For setting new password
+class ResetPasswordSerializer(serializers.Serializer):
+    password = serializers.CharField()
+    confirm_password = serializers.CharField()
