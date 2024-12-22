@@ -1,0 +1,66 @@
+{% extends 'index.html' %}
+
+{% block body %}
+
+<!-- Load Static Files (if needed) -->
+{% load static %}
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+<div class="container mt-5">
+    <h2 class="mb-4">Order List</h2>
+    <table class="table table-bordered table-hover" id="orderTable">
+        <thead class="table-dark">
+            <tr>
+                <th>NO</th>
+                <th>Customer Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Joined Date</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ customer.full_name }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.created_at }}</td>
+                
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center">No orders have been placed yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS and DataTables JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#orderTable').DataTable({
+            language: {
+                search: "Search Orders:",
+                zeroRecords: "No matching orders found.",
+                info: "Showing _START_ to _END_ of _TOTAL_ orders",
+                infoEmpty: "Showing 0 to 0 of 0 orders",
+                paginate: {
+                    first: "First",
+                    last: "Last",
+                    next: "Next",
+                    previous: "Previous"
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
